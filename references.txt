@@ -1,0 +1,8 @@
+TASK 1
+
+UCB 
+(Auer et al.) https://link.springer.com/article/10.1023/A:1013689704352
+
+Thompson Sampling 
+(Stanford Tutorial: Chapter 3) https://web.stanford.edu/~bvr/pubs/TS_Tutorial.pdf
+(NumPy doc) https://numpy.org/doc/2.1/reference/random/generated/numpy.random.beta.html
