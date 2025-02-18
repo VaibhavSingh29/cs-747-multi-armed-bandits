@@ -95,17 +95,17 @@ if __name__ == '__main__':
   # bandit instance:
   # 20 arms with uniformly distributed means
 
-  task1probs = [i/20 for i in range(20)]
-  task1(Eps_Greedy, task1probs, 1)
-  task1(UCB, task1probs)
-  task1(KL_UCB, task1probs)
-  task1(Thompson_Sampling, task1probs)
+  # task1probs = [i/20 for i in range(20)]
+  # task1(Eps_Greedy, task1probs, 1)
+  # task1(UCB, task1probs)
+  # task1(KL_UCB, task1probs)
+  # task1(Thompson_Sampling, task1probs)
   # TASK 1 ENDS HERE
 
   # TASK 2 STARTS HERE
 
-  # task2probs = [i/20 for i in range(20)]
-  # task2(CostlySetBanditsAlgo, task2probs)
+  task2probs = [i/20 for i in range(20)]
+  task2(CostlySetBanditsAlgo, task2probs)
   # TASK 2 ENDS HERE
 
 
