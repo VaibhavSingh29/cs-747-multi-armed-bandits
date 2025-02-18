@@ -62,22 +62,22 @@ class Eps_Greedy(Algorithm):
 
 # START EDITING HERE
 def bernoulli_kldiv(p, q):
-    p = np.clip(p, 1e-8, 1 - 1e-8)
+    p = np.clip(p, 1e-8, 1 - 1e-8) # Clipping to avoid 0, 1 in math.log
     q = np.clip(q, 1e-8, 1 - 1e-8)
     return p * math.log(p / q) + (1 - p) * math.log((1 - p) / (1 - q))
 
-def binary_search(empirical_mean, num_arm_plays, num_plays, c=3):
-    num_iters = 10
-    start = empirical_mean
+def binary_search(empirical_mean, num_arm_plays, num_plays, c=3): # Binary search for find the optimal q satisfying the KL-UCB conditon
+    num_iters = 10 # Number of iterations to run search for.
+    start = empirical_mean # q belongs to [empirical_mean, 1]
     end = 1
     for i in range(num_iters):
-        q = (start + end) / 2
+        q = (start + end) / 2 # Start at midpoint of interval and iteratively shrink interval until we exhaust num_iters.
         if (num_arm_plays * bernoulli_kldiv(empirical_mean, q)) <= (math.log(num_plays) + c * math.log(math.log(num_plays))):
             start = q
         else:
             end = q
     
-    return (start + end) / 2
+    return (start + end) / 2 # Return midpoint estimate
 
 # END EDITING HERE
 
@@ -89,8 +89,8 @@ class UCB(Algorithm):
         self.values = np.zeros(num_arms)
         
         self.num_arms = num_arms
-        self.num_plays = 0
-        self.pull_init_arm = -1
+        self.num_plays = 0 # Keeps track of the total number of plays.
+        self.pull_init_arm = -1 # Helper to track arm-number for the round-robin phase
         # END EDITING HERE
     
     def give_pull(self):
@@ -125,8 +125,8 @@ class KL_UCB(Algorithm):
         self.values = np.zeros(num_arms)
 
         self.num_arms = num_arms
-        self.num_plays = 0
-        self.pull_init_arm = -1
+        self.num_plays = 0 # Keeps track of the total number of plays.
+        self.pull_init_arm = -1 # Helper to track arm-number for the round-robin phase
         # END EDITING HERE
     
     def give_pull(self):
@@ -164,13 +164,13 @@ class Thompson_Sampling(Algorithm):
     
     def give_pull(self):
         # START EDITING HERE
-        best_arm = np.argmax(np.random.beta(self.alpha, self.beta))
+        best_arm = np.argmax(np.random.beta(self.alpha, self.beta)) # Sample from beta for each arm, and choose best arm.
         return best_arm
         # END EDITING HERE
     
     def get_reward(self, arm_index, reward):
         # START EDITING HERE
-        self.alpha[arm_index] += reward
+        self.alpha[arm_index] += reward # Update params based on reward
         self.beta[arm_index] += (1 - reward)
         # END EDITING HERE
 
