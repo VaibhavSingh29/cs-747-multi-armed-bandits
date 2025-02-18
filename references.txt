@@ -1,8 +1,16 @@
 TASK 1
 
 UCB 
-(Auer et al.) https://link.springer.com/article/10.1023/A:1013689704352
+(Auer et al., Section 2, Figure 1) https://link.springer.com/article/10.1023/A:1013689704352
+
+KL-UCB
+(Garivier and Cappe, Section 2) https://arxiv.org/abs/1102.2490
+(NumPy doc) https://numpy.org/doc/2.1/reference/generated/numpy.clip.html
 
 Thompson Sampling 
 (Stanford Tutorial: Chapter 3) https://web.stanford.edu/~bvr/pubs/TS_Tutorial.pdf
 (NumPy doc) https://numpy.org/doc/2.1/reference/random/generated/numpy.random.beta.html
+
+TASK 2
+
+TASK 3
