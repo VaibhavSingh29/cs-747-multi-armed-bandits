@@ -34,31 +34,26 @@ class CostlySetBanditsAlgo(Algorithm):
         self.values = np.zeros(self.num_arms)
         self.alpha = np.ones(num_arms) # Setting a uniform prior for each arm.
         self.beta = np.ones(num_arms)
+        self.k = 0.5 # Thresholding hparam
+        self.query_set = None
         # END EDITING HERE
     
     def give_query_set(self):
         # START EDITING HERE
-        if self.num_plays < self.num_arms:
-            self.num_plays += 1
-            self.pull_init_arm += 1
-            return [self.pull_init_arm]
-        else:
-            query_set = []
-            best_arm = np.argmax(self.values + np.sqrt(2 * math.log(self.num_plays) / self.counts))
-            query_set.append(best_arm)
-            arm_set = [i for i in range(self.num_arms) if i not in query_set]
-            for i in range(self.k):
-                query_set.append(np.random.choice(arm_set, replace=False))
-            self.num_plays += 1
-            return query_set
+        samples = np.random.beta(self.alpha, self.beta)
+        var = (self.alpha * self.beta) / ((self.alpha + self.beta + 1) * (self.alpha + self.beta) ** 2)
+        mean = (self.alpha) / (self.alpha + self.beta)
+        self.query_set = [i for i, s in enumerate(samples) if s >= self.k] # Select arms where sample from beta is greater or equal to 0.5 for exploitation
+        self.query_set.extend([i for i, s in enumerate(samples) if var[i] > 1e-2]) # We also select arms with high variance for exploration
+        self.query_set = list(set(self.query_set))
+        if len(self.query_set) == 0:
+            self.query_set = np.argsort(-samples)[:self.num_arms // 2].tolist() # In case, query set is empty, we take top-k arms where k = num_arms / 2
+        return self.query_set
         # END EDITING HERE
     
     def get_reward(self, arm_index, reward):
         # START EDITING HERE
-        self.counts[arm_index] += 1
-        n = self.counts[arm_index]
-        value = self.values[arm_index]
-        new_value = ((n - 1) / n) * value + (1 / n) * reward
-        self.values[arm_index] = new_value
+        self.alpha[arm_index] += reward # Update params based on reward
+        self.beta[arm_index] += (1 - reward)
         #END EDITING HERE
 

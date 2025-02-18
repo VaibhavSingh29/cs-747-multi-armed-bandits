@@ -15,8 +15,8 @@ class VaryingEpsGreedy(Algorithm):
         self.eps = eps
         self.counts = np.zeros(num_arms)
         self.values = np.zeros(num_arms)
-        self.num_plays = 0
-        self.pull_init_arm = -1
+        self.num_plays = 0 # Keeps track of the total number of plays.
+        self.pull_init_arm = -1 # Helper to track arm-number for the round-robin phase
     
     def give_pull(self):
         if self.num_plays < self.num_arms: # Initially we will pull each arm once
@@ -25,8 +25,10 @@ class VaryingEpsGreedy(Algorithm):
             return self.pull_init_arm
         else:
             if np.random.random() < self.eps: # Epsilon-greedy loop
+                self.num_plays += 1
                 return np.random.randint(self.num_arms)
             else:
+                self.num_plays += 1
                 return np.argmax(self.values)
     
     def get_reward(self, arm_index, reward):
@@ -63,10 +65,10 @@ def simulate_task3(algorithm, probs, horizon, eps, num_sims=50):
 
 # DEFINE task3() HERE
 def task3(algorithm, probs, num_sims=50):
-    eps_range = [i for i in np.arange(0, 1.01, 0.01)]
+    eps_range = [i for i in np.arange(0, 1.01, 0.01)] # Epsilon step-size 0.01
     regrets = []
     for eps in eps_range:
-        regrets.append(simulate_task3(algorithm=algorithm, probs=probs, horizon=30000, eps=eps, num_sims=num_sims))
+        regrets.append(simulate_task3(algorithm=algorithm, probs=probs, horizon=30000, eps=eps, num_sims=num_sims)) # Fixed horizon (T) = 30000
 
     print(f"Epsilon value corresponding to least Regret: {eps_range[np.argmin(np.array(regrets))]}")
     plt.plot(eps_range, regrets)
