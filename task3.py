@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from bernoulli_bandit import *
 from task1 import Algorithm
 from multiprocessing import Pool
+import time
 
 # DEFINE your algorithm class here
 class VaryingEpsGreedy(Algorithm):
@@ -18,12 +19,12 @@ class VaryingEpsGreedy(Algorithm):
         self.pull_init_arm = -1
     
     def give_pull(self):
-        if self.num_plays < self.num_arms:
+        if self.num_plays < self.num_arms: # Initially we will pull each arm once
             self.num_plays += 1
             self.pull_init_arm += 1
             return self.pull_init_arm
         else:
-            if np.random.random() < self.eps:
+            if np.random.random() < self.eps: # Epsilon-greedy loop
                 return np.random.randint(self.num_arms)
             else:
                 return np.argmax(self.values)
@@ -65,10 +66,11 @@ def task3(algorithm, probs, num_sims=50):
     eps_range = [i for i in np.arange(0, 1.01, 0.01)]
     regrets = []
     for eps in eps_range:
-        regrets.append(simulate_task3(algorithm, probs, horizon=30000, eps=eps, num_sims=num_sims))
+        regrets.append(simulate_task3(algorithm=algorithm, probs=probs, horizon=30000, eps=eps, num_sims=num_sims))
 
+    print(f"Epsilon value corresponding to least Regret: {eps_range[np.argmin(np.array(regrets))]}")
     plt.plot(eps_range, regrets)
-    plt.title("Regret vs Epsilon")
+    plt.title("Regret vs Epsilon for finite Horizon (T) = 30000")
     plt.savefig("task3-{}-{}.png".format(algorithm.__name__, time.strftime("%Y%m%d-%H%M%S")))
     plt.clf()
 
