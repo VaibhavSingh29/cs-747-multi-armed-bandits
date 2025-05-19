@@ -1,1 +1,3 @@
-# cs-747-assignment-1
+# cs-747-multi-armed-bandits
+
+##### This assignment tests your understanding of the regret minimisation algorithms discussed in class, and ability to extend them to different scenarios. There are 3 tasks, which add up to 12 marks. To begin, in Task 1, you will implement UCB, KL-UCB, and Thompson Sampling, more or less identical to the versions discussed in class. Task 2 involves maximising the reward for a bandit setting where arm pulls are randomly chosen from a query set and come at a cost as a function of the number of arms provided in the query set. Task 3 involves investigating the effect of the epsilon parameter in the epsilon-greedy algorithm.
